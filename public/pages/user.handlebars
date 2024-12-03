@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link href="../stylesheet.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="../scripts/script.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Användare</title>
+</head>
+<body>
+<!-- Navigation menu -->
+<nav id="mainNavMenu">
+    <ul>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/user">User</a></li>
+        {{#if isAdmin}}
+        <li><a href="/admin">Admin</a></li>
+        <li><a href="/votes">Votes</a></li>
+        <li><a href="/results">Results</a></li>
+        <li><a href="/userEditing">User Editing</a></li>
+        <li><a href="/feedback">Feedback</a></li>
+        {{/if}}
+    </ul>
+</nav>
+
+    <div class="tableExtra">
+        <button id="confirmVotesBtn" class="button1">Bekräfta Röstning</button>
+    </div>
+<h1 class="pageName">Låt Röstning</h1>
+</div>
+
+<table id="userTable" class="container">
+    <thead>
+    <tr>
+        <th><h1>Låt</h1></th>
+        <th><h1>Artist</h1></th>
+        <th><h1>Kategori</h1></th>
+        <th><h1>Poäng</h1></th>
+    </tr>
+    </thead>
+    <tbody id="userTbody">
+         {{#each songs}}
+                    <tr data-id={{this.songID}}>
+                        <td>{{this.name}}</td>
+                        <td>{{this.artist}}</td>
+                        <td>{{this.category}}</td>
+                        <td contenteditable="true">{{this.points}}</td>
+                    </tr>
+                {{/each}}
+    </tbody>
+</table>
+
+</body>
+</html>

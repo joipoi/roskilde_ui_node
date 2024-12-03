@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link href="../stylesheet.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="../scripts/script.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Röster</title>
+</head>
+<body>
+
+<nav id="mainNavMenu">
+        <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/user">User</a></li>
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/votes">Votes</a></li>
+            <li><a href="/results">Results</a></li>
+            <li><a href="/userEditing">userEditing</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+        </ul>
+    </nav>
+
+<div class="tableExtra">
+    <select name="userSelect" id="userSelect" >
+        <option value="alla" selected="selected">alla</option>
+        <option value="2">Joel</option>
+        <option value="4">Thorsten</option>
+    </select>
+    <h1 class="pageName">Alla Röster Lista</h1>
+    </div>
+<table id="votesTable" class="container">
+    <thead>
+    <tr>
+        <th><h1>Name</h1></th>
+        <th><h1>Username</h1></th>
+        <th><h1>Rating</h1></th>
+    </tr>
+    </thead>
+    <tbody>
+         {{#each votes}}
+                    <tr>
+                        <td  class="tableCell"> {{this.name}}</td>
+                        <td  class="tableCell">{{this.username}}</td>
+                        <td  class="tableCell">{{this.rating}}</td>
+                    </tr>
+                {{/each}}
+    </tbody>
+</table>
+
+</script>
+</body>
+</html>

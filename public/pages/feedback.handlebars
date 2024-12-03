@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link href="../stylesheet.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="../scripts/script.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback</title>
+</head>
+<body>
+
+
+<nav id="mainNavMenu">
+        <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/user">User</a></li>
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/votes">Votes</a></li>
+            <li><a href="/results">Results</a></li>
+            <li><a href="/userEditing">userEditing</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+        </ul>
+    </nav>
+
+<h1>Skriv feedback till Joel</h1>
+<textarea id="feedbackTextarea">
+
+</textarea>
+<button id="feedbackBtn" class="button1">Submit</button>
+ <ol>
+ {{#each feedback}}
+<li><p>{{this.text}}</p></li>
+{{/each}}
+</ol>
+
+
+ 
+
+</script>
+</body>
+</html>
