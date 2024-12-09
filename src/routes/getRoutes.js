@@ -3,6 +3,9 @@ const db = require('../database');
 
 const router = express.Router();
 
+db.addUser('admin', 'gulvinge31');
+db.addUser('thorsten', 'hylipan');
+db.addUser('joel', 'malzop9');
 
 router.get('/', (req, res) => {
     res.render('login'); 

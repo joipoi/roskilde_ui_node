@@ -3,10 +3,11 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const pool = mysql.createPool({
-  host: 'localhost',        
+  host: '127.0.0.1',        
   user: process.env.DB_USER,              
   password: process.env.DB_PASS, 
-  database: 'thorsten_music'       
+  database: 'thorsten_music',
+  charset: 'utf8mb4'
 });
 
 async function getConnection() {
@@ -46,10 +47,18 @@ async function query(sql, params) {
     const results = await query('DELETE FROM song WHERE songID = ?', [id]);
     return results;
   }
-  async function addSong(name, artist, category, year) {
-    const results = await query('INSERT INTO song (`name`, `artist`, `category`, `year`) VALUES (?, ?, ?, ?);', [name, artist, category, year]);
-    return results;
-  }
+
+async function addSong(name, artist, category, year) {
+    try {
+        const results = await query('INSERT INTO song (`name`, `artist`, `category`, `year`) VALUES (?, ?, ?, ?);', [name, artist, category, year]);
+        return results;
+    } catch (error) {
+        console.error('Database error during song insertion:', error);
+        throw error; // Rethrow the error to be handled by the calling function
+    }
+}
+
+
   async function updateSong(name, artist, category, year, id) {
     const results = await query('UPDATE song SET name = ?, artist = ?, category = ?, year = ? WHERE songID = ?;', [name, artist, category, year, id]);
     return results;

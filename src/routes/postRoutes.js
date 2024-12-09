@@ -3,12 +3,21 @@ const db = require('../database');
 const passport = require('passport');
 const router = express.Router();
 
-router.post('/insertSong', (req, res) => {
+
+
+router.post('/insertSong', async (req, res) => {
     let data = req.body;
-    db.addSong(data.name, data.artist, data.category, 2024);
-    
-    return res.json({ response: "added song with name " + data.name  }); 
+
+    try {
+        // Call the addSong function and wait for its result
+        await db.addSong(data.name, data.artist, data.category, 2024);
+        return res.json({ response: "Added song with name " + data.name });
+    } catch (error) {
+        console.error('Error adding song:', error);
+        return res.status(500).json({ error: "Failed to add song. Please try again." });
+    }
 });
+
 
 router.post('/deleteSong', (req, res) => {
     let data = req.body;
