@@ -41,7 +41,8 @@ router.get('/user', async (req, res) => {
       }
     let isAdmin = req.user.userID == process.env.ADMIN_ID;
     try {
-        const db_data = await db.getUserSongRatingsByYear(1, 2024);
+        const db_data = await db.getUserSongRatingsByYear(req.user.userID, 2024);
+        console.log(db_data);
         const data = { songs: db_data, isAdmin: isAdmin };
         res.render('user', data);
     } catch (error) {

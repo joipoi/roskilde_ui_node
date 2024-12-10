@@ -140,7 +140,6 @@ async function hashPassword(password) {
 
 
   module.exports = {
-    query,
     getSongs,
     getSongByYear,
     deleteSong,
