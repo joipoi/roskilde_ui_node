@@ -2,7 +2,7 @@ const express = require('express');
 const { createServer } = require('http');
 const getRouter = require('./routes/getRoutes');
 const postRouter = require('./routes/postRoutes');
-const {configureMiddleware, sessionMiddleware} = require('./middleware');
+const {configureMiddleware} = require('./middleware');
 
 const app = express();
 configureMiddleware(app);

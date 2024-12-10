@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<link href="../stylesheet.css" rel="stylesheet"/>
+<link href="../stylesheet.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="text/javascript" src="../scripts/script.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>Användare SKAPNING</title>
 </head>
+
 <body>
 
-<nav id="mainNavMenu">
+    <nav id="mainNavMenu">
         <ul>
             <li><a href="/login">Login</a></li>
             <li><a href="/user">User</a></li>
@@ -20,39 +23,26 @@
         </ul>
     </nav>
 
-<div class="tableExtra">
-    <h1 class="pageName">Se Användare</h1>
-</div>
-<table class="container" id="userEditingTable">
-    <thead>
-    <tr>
-        <th>Username</th>
-    </tr>
-    </thead>
-    <tbody> 
-<tr>
-<td class="tableCell">joel </td>
-</tr>
-<tr>
-<td class="tableCell">admin </td>
-</tr>
-<tr>
-<td class="tableCell">thorsten </td>
-</tr>
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<script th:inline="javascript">
-  //  document.onload = userEditingInit();
-
-
-</script>
+    <div class="tableExtra">
+        <h1 class="pageName">Se Användare</h1>
+        <button id="addUser" class="button1">Lägg till användare</button>
+    </div>
+    <table class="container" id="userEditingTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Lösenord</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr data-id={{this.songID}}>
+                <td class="tableCell">{{this.username}} </td>
+                <td class="tableCell">******</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </body>
+
 </html>
