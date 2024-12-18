@@ -62,6 +62,7 @@ router.post('/login', (req, res, next) => {
 router.post('/updateVotes', (req, res) => {
     let votes = req.body.votes;
     let userID = req.user.userID;
+   
 
     db.addVotes(userID, votes);
     

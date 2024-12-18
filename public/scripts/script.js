@@ -86,8 +86,8 @@ function addRow(table) {
       const row = event.target.closest("tr");
       const username = row.children[0].textContent.trim();
       const password = row.children[1].textContent.trim();
-
       registerUser(username, password);
+      event.target.closest("td").remove();
     });
   }
 
@@ -165,8 +165,10 @@ function getVotes() {
       songID: row.dataset.id,
       rating: row.children[3].textContent,
     };
+    console.log("rating = " + row.children[3].textContent);
     votes.push(vote);
   });
+
   return votes;
 }
 
@@ -191,8 +193,7 @@ function makeVotesTable(event) {
 
 async function insertSong(event) {
   let parentRow = event.target.parentNode.parentNode.parentNode;
-  console.log(parentRow);
-  event.target.parentNode.remove();
+  event.target.closest("td").remove();
 
   try {
     const response = await axios.post("/insertSong", rowToSong(parentRow));

@@ -86,22 +86,29 @@ async function addSong(name, artist, category, year) {
   //vote queries
   async function addVotes(userID, votes) {
     const queries = votes.map(vote => {
+      const rating = (vote.rating === '' || vote.rating === null) ? null : vote.rating;
         return query(
             `INSERT INTO vote (songID, userID, rating) VALUES (?, ?, ?)
              ON DUPLICATE KEY UPDATE rating = ?;`,
-            [vote.songID, userID, vote.rating, vote.rating]
+            [vote.songID, userID, rating, rating]
         );
     });
 
     const results = await Promise.all(queries);
     return results;
 }
-  async function getVotes() {
-    const results = await query("SELECT  vote.rating, user.username, song.name FROM vote JOIN song ON vote.songID = song.songID JOIN user ON vote.userID = user.userID");
-    return results;
-  }
+async function getVotes() {
+  const results = await query(
+      `SELECT vote.rating, user.username, song.name 
+       FROM vote 
+       JOIN song ON vote.songID = song.songID 
+       JOIN user ON vote.userID = user.userID 
+       WHERE vote.rating IS NOT NULL`
+  );
+  return results;
+}
   async function getVotesByUserID(userID) {
-    const results = await query("SELECT  vote.rating, user.username, song.name FROM vote JOIN song ON vote.songID = song.songID JOIN user ON vote.userID = user.userID where user.userID = ?",
+    const results = await query("SELECT  vote.rating, user.username, song.name FROM vote JOIN song ON vote.songID = song.songID JOIN user ON vote.userID = user.userID where user.userID = ? AND vote.rating IS NOT NULL",
       [userID]
     );
     return results;
