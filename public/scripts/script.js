@@ -311,7 +311,7 @@ async function addFeedback() {
 async function removeFeedback() {
   try {
     const response = await axios.post("/removeFeedback");
-    console.log("Response received:", response.data);
+    document.getElementById("feedbackList").innerHTML = "";
   } catch (error) {
     console.error("Error :", error);
   }
