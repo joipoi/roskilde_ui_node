@@ -27,7 +27,8 @@
 
 </textarea>
 <button id="feedbackBtn" class="button1">Submit</button>
- <ol>
+<button id="removeFeedbackBtn" class="button1">Remove All</button>
+ <ol id="feedbackList">
  {{#each feedback}}
 <li><p>{{this.text}}</p></li>
 {{/each}}

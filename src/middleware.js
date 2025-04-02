@@ -48,9 +48,14 @@ const configurePassport = () => {
 
                 const users = await db.getUser(username); 
             const user = users[0]; 
+            console.log(user);
                 if (!user) {
                     console.log('User not found'); 
                     return done(null, false, { message: 'Incorrect username.' });
+                }
+                if (user.password === "no-password") {
+                    // If no password is set, the user can log in without one
+                    return done(null, user);
                 }
 
                 const match = await bcrypt.compare(password, user.password);

@@ -10,7 +10,7 @@ router.post('/insertSong', async (req, res) => {
 
     try {
         // Call the addSong function and wait for its result
-        await db.addSong(data.name, data.artist, data.category, 2024);
+        await db.addSong(data.name, data.artist, data.category, 2024, data.user);
         return res.json({ response: "Added song with name " + data.name });
     } catch (error) {
         console.error('Error adding song:', error);
@@ -18,13 +18,20 @@ router.post('/insertSong', async (req, res) => {
     }
 });
 
-
 router.post('/deleteSong', (req, res) => {
     let data = req.body;
     db.deleteSong(data.songID);
     
     return res.json({ response: "deleted song with id " + data.songID  }); 
 });
+
+router.post('/editSong', (req, res) => {
+    let data = req.body;
+    db.updateSong(data.name, data.artist, data.category, 2020, data.user, data.id);
+    
+    return res.json({ response: "edited song with id " + data.id  }); 
+});
+
 router.post('/registerUser', (req, res) => {
     let data = req.body;
     db.addUser(data.username, data.password);
@@ -36,7 +43,9 @@ router.post('/login', (req, res, next) => {
 
     passport.authenticate('local', (err, user, info) => {
         console.log("Passport is starting authentication");
-        
+        console.log(err);
+        console.log(user);
+        console.log(info);
         if (err) {
             console.log("Error during authentication:", err);
             return res.status(500).json({ success: false, message: 'Internal server error.' });
@@ -75,6 +84,16 @@ router.post('/addFeedback', (req, res) => {
     
     return res.json({ response: "added feedback"}); 
 });
+
+router.post('/removeFeedback', (req, res) => {
+    db.removeFeedback();
+    
+    return res.json({ response: "added feedback"}); 
+});
+
+
+
+
 router.post('/getVotesByUserID', async (req, res) => {
     let userID = req.body.userID;
     let response;

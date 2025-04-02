@@ -28,6 +28,7 @@
     <div class="tableExtra">
         <button id="newRowBtn" class="button1">Lägg till</button>
         <button id="removeBtn" class="button1">Ta bort</button>
+        <button id="saveBtn" class="button1">Spara</button>
         <span style="visibility: hidden;" id="unsaved">Det finns osparade ändringar</span>
     </div>
 
@@ -43,14 +44,18 @@
                 <th>
                     <h1>Kategori</h1>
                 </th>
+                 <th>
+                    <h1>Användare</h1>
+                </th>
             </tr>
         </thead>
         <tbody id="adminTBody">
             {{#each songs}}
             <tr data-id={{this.songID}}>
-                <td class="tableCell"> {{this.name}}</td>
-                <td class="tableCell">{{this.artist}}</td>
-                <td class="tableCell">{{this.category}}</td>
+                <td  contenteditable="true" class="tableCell"> {{this.name}}</td>
+                <td  contenteditable="true" class="tableCell">{{this.artist}}</td>
+                <td  contenteditable="true" class="tableCell">{{this.category}}</td>
+                <td  contenteditable="true" class="tableCell">{{this.user}}</td>
                 <td style="display:none;" class="removeCell symbol-cell">
                     <svg class="remove-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path

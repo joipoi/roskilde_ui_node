@@ -17,6 +17,10 @@ window.addEventListener("load", (event) => {
       .getElementById("removeBtn")
       .addEventListener("click", toggleRemove);
 
+      document
+      .getElementById("saveBtn")
+      .addEventListener("click", updateSongs);
+
     adminTable.addEventListener("click", function (event) {
       if (event.target.closest(".removeCell")) {
         const row = event.target.closest("tr");
@@ -51,6 +55,11 @@ window.addEventListener("load", (event) => {
     document
       .getElementById("feedbackBtn")
       .addEventListener("click", addFeedback);
+
+      document
+      .getElementById("removeFeedbackBtn")
+      .addEventListener("click", removeFeedback);
+     
   } else if (window.location.pathname === "/votes") {
     document
       .getElementById("userSelect")
@@ -101,14 +110,6 @@ function addRow(table) {
   table.appendChild(newRow);
 }
 
-function setAsSelected(rowObj) {
-  if (selectedRow != null) {
-    selectedRow.style.backgroundColor = "white";
-  }
-  selectedRow = rowObj;
-  selectedRow.style.backgroundColor = "#997f7d";
-}
-
 function markRowAsModified(event) {
   var cell = event.target;
   if (cell.classList.contains("tableCell")) {
@@ -126,11 +127,14 @@ function rowToSong(row) {
   let name = row.children[0].textContent;
   let artist = row.children[1].textContent;
   let category = row.children[2].textContent;
+  console.log(row);
+  let user = row.children[3].textContent;
 
   let song = {
     name: name,
     artist: artist,
     category: category,
+    user: user
   };
 
   return song;
@@ -193,6 +197,8 @@ function makeVotesTable(event) {
 
 async function insertSong(event) {
   let parentRow = event.target.parentNode.parentNode.parentNode;
+  console.log(event);
+  console.log(parentRow);
   event.target.closest("td").remove();
 
   try {
@@ -200,6 +206,30 @@ async function insertSong(event) {
     console.log("Response received:", response.data);
   } catch (error) {
     console.error("Error :", error);
+  }
+  clearModified();
+}
+async function updateSongs() {
+  
+  for(let row of modifiedRowsList){
+    let id = row.dataset.id;
+    let song = row.children[0].innerHTML;
+    let artist = row.children[1].innerHTML;
+    let category = row.children[2].innerHTML;
+    let user = row.children[3].innerHTML;
+
+    try {
+      const response = await axios.post("/editSong", {
+        name: song,
+        artist: artist,
+        category: category,
+        id: id,
+        user: user
+      });
+      console.log("Response received:", response.data);
+    } catch (error) {
+      console.error("Error :", error);
+    }
   }
   clearModified();
 }
@@ -221,6 +251,9 @@ async function removeRow(songID) {
   clearModified();
 }
 async function login(username, password) {
+  if(password === ''){
+    password = 'no-password';
+  }
   try {
     const response = await axios.post("/login", {
       username: username,
@@ -236,6 +269,7 @@ async function login(username, password) {
     }
   } catch (error) {
     console.error("Error :", error);
+    document.getElementById("loginDisplay").innerHTML = "Login Failed for user: " + username;
   }
 }
 
@@ -263,6 +297,7 @@ async function updateVotes(votes) {
 }
 async function addFeedback() {
   let text = document.getElementById("feedbackTextarea").value;
+  document.getElementById("feedbackList").innerHTML += "<li><p>" + text + "</p></li>";
   try {
     const response = await axios.post("/addFeedback", {
       text: text,
@@ -272,6 +307,17 @@ async function addFeedback() {
     console.error("Error :", error);
   }
 }
+
+async function removeFeedback() {
+  try {
+    const response = await axios.post("/removeFeedback");
+    console.log("Response received:", response.data);
+  } catch (error) {
+    console.error("Error :", error);
+  }
+}
+
+
 
 async function getVotesByUserID(userID) {
   try {

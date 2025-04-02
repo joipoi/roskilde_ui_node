@@ -48,9 +48,9 @@ async function query(sql, params) {
     return results;
   }
 
-async function addSong(name, artist, category, year) {
+async function addSong(name, artist, category, year, user) {
     try {
-        const results = await query('INSERT INTO song (`name`, `artist`, `category`, `year`) VALUES (?, ?, ?, ?);', [name, artist, category, year]);
+        const results = await query('INSERT INTO song (`name`, `artist`, `category`, `year`, `user`) VALUES (?, ?, ?, ?, ?);', [name, artist, category, year, user]);
         return results;
     } catch (error) {
         console.error('Database error during song insertion:', error);
@@ -59,8 +59,8 @@ async function addSong(name, artist, category, year) {
 }
 
 
-  async function updateSong(name, artist, category, year, id) {
-    const results = await query('UPDATE song SET name = ?, artist = ?, category = ?, year = ? WHERE songID = ?;', [name, artist, category, year, id]);
+  async function updateSong(name, artist, category, year, user, id ) {
+    const results = await query('UPDATE song SET name = ?, artist = ?, category = ?, year = ?, user = ? WHERE songID = ?;', [name, artist, category, year, user, id]);
     return results;
   }
 
@@ -78,7 +78,13 @@ async function addSong(name, artist, category, year) {
     return results;
   }
   async function addUser(username, password) {
-    const hashedPassword = await hashPassword(password);
+    let hashedPassword;
+    if(password === '') {
+      hashedPassword = "no-password";
+    }else{
+      hashedPassword = await hashPassword(password);
+    }
+    
     const results = await query('INSERT INTO user ( `username`, `password`) VALUES (?, ?);', [username, hashedPassword]);
     return results;
   }
@@ -135,6 +141,12 @@ async function addFeedback(text) {
   return results;
 }
 
+async function removeFeedback() {
+  const results = await query('DELETE FROM feedback');
+  return results;
+}
+
+
 //helper functions
 
 async function hashPassword(password) {
@@ -162,5 +174,6 @@ async function hashPassword(password) {
     addVotes,
     getFeedback,
     addFeedback,
-    getVotesByUserID
+    getVotesByUserID,
+    removeFeedback
   };
