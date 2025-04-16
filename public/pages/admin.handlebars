@@ -49,22 +49,39 @@
                 </th>
             </tr>
         </thead>
-        <tbody id="adminTBody">
-            {{#each songs}}
-            <tr data-id={{this.songID}}>
-                <td  contenteditable="true" class="tableCell"> {{this.name}}</td>
-                <td  contenteditable="true" class="tableCell">{{this.artist}}</td>
-                <td  contenteditable="true" class="tableCell">{{this.category}}</td>
-                <td  contenteditable="true" class="tableCell">{{this.user}}</td>
-                <td style="display:none;" class="removeCell symbol-cell">
-                    <svg class="remove-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path
+      <tbody id="adminTBody">
+    {{#each songs}}
+    <tr data-id={{this.songID}}>
+        <td contenteditable="true" class="tableCell">{{this.name}}</td>
+        <td contenteditable="true" class="tableCell">{{this.artist}}</td>
+         <td class="tableCell">
+            <select data-category={{this.category}} class="category-select">
+                {{#each ../categories}}
+                    <option>
+                        {{this.name}}
+                    </option>
+                {{/each}}
+            </select>
+        </td>
+        <td class="tableCell">
+            <select data-user={{this.user}} class="user-select">
+                {{#each ../users}}
+                    <option>
+                        {{this.username}}
+                    </option>
+                {{/each}}
+            </select>
+        </td>
+        <td style="display:none;" class="removeCell symbol-cell">
+            <svg class="remove-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                      <path
                             d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                    </svg>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
+            </svg>
+        </td>
+    </tr>
+    {{/each}}
+</tbody>
+
     </table>
 
     </script>

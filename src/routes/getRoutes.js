@@ -13,7 +13,10 @@ router.get('/login', (req, res) => {
 router.get('/admin', ensureAdmin, async (req, res) => {
     try {
         const db_data = await db.getSongs();
-        const data = { songs: db_data};
+        let users = await db.getUsers();
+        users = users.filter((user) => user.username != "admin");
+        let categories = await db.getCategory();
+        const data = { songs: db_data, users: users, categories: categories };
         res.render('admin', data);
     } catch (error) {
         console.error(error);

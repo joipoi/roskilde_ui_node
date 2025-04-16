@@ -43,9 +43,6 @@ router.post('/login', (req, res, next) => {
 
     passport.authenticate('local', (err, user, info) => {
         console.log("Passport is starting authentication");
-        console.log(err);
-        console.log(user);
-        console.log(info);
         if (err) {
             console.log("Error during authentication:", err);
             return res.status(500).json({ success: false, message: 'Internal server error.' });

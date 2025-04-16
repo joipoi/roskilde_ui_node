@@ -13,6 +13,31 @@ window.addEventListener("load", (event) => {
       addRow(adminTable);
     });
 
+    const userSelects = document.querySelectorAll('.user-select');
+
+    userSelects.forEach(select => {
+        const selectedUser = select.getAttribute('data-user');
+
+       Array.from(select.options).forEach(option => {
+            if (option.value === selectedUser) {
+                option.selected = true;
+            }
+        }); 
+    });
+
+    const categorySelects = document.querySelectorAll('.category-select');
+
+    categorySelects.forEach(select => {
+        const selectedCategory = select.getAttribute('data-category');
+
+       Array.from(select.options).forEach(option => {
+            if (option.value === selectedCategory) {
+                option.selected = true;
+            }
+        }); 
+    });
+
+
     document
       .getElementById("removeBtn")
       .addEventListener("click", toggleRemove);
@@ -64,22 +89,36 @@ window.addEventListener("load", (event) => {
     document
       .getElementById("userSelect")
       .addEventListener("change", makeVotesTable);
+
   } else if (window.location.pathname === "/userEditing") {
+
+    const userEditingTable = document.getElementById("userEditingTable");
     document.getElementById("addUser").addEventListener("click", () => {
-      const userEditingTable = document.getElementById("userEditingTable");
       addRow(userEditingTable);
     });
   }
 
-  console.log("page loaded");
 });
 
 function addRow(table) {
   const columnCount = table.rows[0].cells.length;
   const newRow = document.createElement("tr");
+  const userSelect = document.querySelector('.user-select');
+  const categorySelect = document.querySelector('.category-select');
 
   for (let i = 0; i < columnCount; i++) {
     const newCell = document.createElement("td");
+  
+    if(i == 3){
+      const clonedSelect = userSelect.cloneNode(true);
+      clonedSelect.removeAttribute('data-user');
+      newCell.appendChild(clonedSelect);
+    }
+    if(i == 2){
+      const clonedSelect = categorySelect.cloneNode(true);
+      clonedSelect.removeAttribute('data-category');
+      newCell.appendChild(clonedSelect);
+    }
     newCell.setAttribute("contenteditable", "true");
     newCell.classList.add("tableCell");
     newRow.appendChild(newCell);
@@ -111,7 +150,10 @@ function addRow(table) {
 }
 
 function markRowAsModified(event) {
-  var cell = event.target;
+  let cell = event.target;
+  if(cell.className == "user-select" || cell.className == "category-select"){
+    cell = cell.parentNode;
+  }
   if (cell.classList.contains("tableCell")) {
     var row = cell.parentNode;
 
@@ -122,14 +164,13 @@ function markRowAsModified(event) {
     row.classList.add("changed");
   }
   unsavedChangesEle.style.visibility = "visible";
+  console.log(modifiedRowsList);
 }
 function rowToSong(row) {
   let name = row.children[0].textContent;
   let artist = row.children[1].textContent;
-  let category = row.children[2].textContent;
-  console.log(row);
-  let user = row.children[3].textContent;
-
+  let category = row.children[2].children[0].value;
+  let user = row.children[3].children[0].value;
   let song = {
     name: name,
     artist: artist,
@@ -197,8 +238,6 @@ function makeVotesTable(event) {
 
 async function insertSong(event) {
   let parentRow = event.target.parentNode.parentNode.parentNode;
-  console.log(event);
-  console.log(parentRow);
   event.target.closest("td").remove();
 
   try {
@@ -212,20 +251,11 @@ async function insertSong(event) {
 async function updateSongs() {
   
   for(let row of modifiedRowsList){
-    let id = row.dataset.id;
-    let song = row.children[0].innerHTML;
-    let artist = row.children[1].innerHTML;
-    let category = row.children[2].innerHTML;
-    let user = row.children[3].innerHTML;
-
+    let song = rowToSong(row);
+    song.id = row.dataset.id;
+    
     try {
-      const response = await axios.post("/editSong", {
-        name: song,
-        artist: artist,
-        category: category,
-        id: id,
-        user: user
-      });
+      const response = await axios.post("/editSong", song);
       console.log("Response received:", response.data);
     } catch (error) {
       console.error("Error :", error);

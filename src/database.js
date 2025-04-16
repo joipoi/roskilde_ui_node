@@ -146,6 +146,13 @@ async function removeFeedback() {
   return results;
 }
 
+//category queries
+async function getCategory() {
+  const results = await query("SELECT  * from category");
+  return results;
+}
+
+
 
 //helper functions
 
@@ -175,5 +182,6 @@ async function hashPassword(password) {
     getFeedback,
     addFeedback,
     getVotesByUserID,
-    removeFeedback
+    removeFeedback,
+    getCategory
   };

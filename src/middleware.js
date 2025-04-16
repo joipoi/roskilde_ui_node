@@ -44,11 +44,10 @@ const configurePassport = () => {
     passport.use(new LocalStrategy(
         async (username, password, done) => {
             try {
-                console.log(`Attempting to log in user: ${username}`); 
+               // console.log(`Attempting to log in user: ${username}`); 
 
                 const users = await db.getUser(username); 
             const user = users[0]; 
-            console.log(user);
                 if (!user) {
                     console.log('User not found'); 
                     return done(null, false, { message: 'Incorrect username.' });
@@ -64,7 +63,7 @@ const configurePassport = () => {
                     return done(null, false, { message: 'Incorrect password.' });
                 }
 
-                console.log(`User ${username} logged in successfully`); 
+            //    console.log(`User ${username} logged in successfully`); 
                 return done(null, user);
             } catch (err) {
                 console.error('Error during authentication:', err); 
