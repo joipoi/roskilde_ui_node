@@ -37,6 +37,21 @@ window.addEventListener("load", (event) => {
         }); 
     });
 
+    const editable = document.querySelectorAll('[contenteditable]');
+
+    //Forces copy paste to not inculde style
+    editable.forEach(element => {
+      element.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = e.clipboardData.getData('text/plain');
+      
+        document.execCommand('insertText', false, text);
+      });
+    });
+
+    
+    
+
 
     document
       .getElementById("removeBtn")
@@ -122,6 +137,16 @@ function addRow(table) {
     newCell.setAttribute("contenteditable", "true");
     newCell.classList.add("tableCell");
     newRow.appendChild(newCell);
+
+    newCell.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = e.clipboardData.getData('text/plain');
+    
+      // Insert plain text at the caret position
+      document.execCommand('insertText', false, text);
+    });
+
+
   }
   const symbolCell = document.createElement("td");
   symbolCell.className = "symbol-cell";
@@ -170,7 +195,6 @@ function markRowAsModified(event) {
   
 }
 function rowToSong(row) {
-  console.log(row);
   let name = row.children[0].textContent;
   let artist = row.children[1].textContent;
   let category = row.children[2].children[0].value;

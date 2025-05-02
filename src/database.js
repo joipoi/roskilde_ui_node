@@ -11,21 +11,33 @@ const pool = mysql.createPool({
 });
 
 async function getConnection() {
+  try {
     return await pool.getConnection();
+  } catch (error) {
+    console.error('Database connection error:', error.message);
+    return null; // fail gracefully
   }
-
+}
 
 async function query(sql, params) {
-    const connection = await getConnection();
-    try {
-      const [results] = await connection.execute(sql, params);
-      return results;
-    } catch (error) {
-      throw error;
-    } finally {
-      connection.release();
-    }
+  const connection = await getConnection();
+  if (!connection) {
+    console.warn('No database connection available.');
+    return null;
   }
+
+  try {
+    const [results] = await connection.execute(sql, params);
+    return results;
+  } catch (error) {
+    console.error('Query error:', error.message, 'SQL:', sql, 'Params:', params);
+    return [];
+  } finally {
+    connection.release();
+  }
+}
+
+
   //song queries
   async function getSongs() {
     const results = await query('SELECT * from song');
