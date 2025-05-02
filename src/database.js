@@ -54,7 +54,7 @@ async function addSong(name, artist, category, year, user) {
         return results;
     } catch (error) {
         console.error('Database error during song insertion:', error);
-        throw error; // Rethrow the error to be handled by the calling function
+        return null
     }
 }
 

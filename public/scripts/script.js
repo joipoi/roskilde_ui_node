@@ -151,22 +151,26 @@ function addRow(table) {
 
 function markRowAsModified(event) {
   let cell = event.target;
+  
   if(cell.className == "user-select" || cell.className == "category-select"){
     cell = cell.parentNode;
   }
   if (cell.classList.contains("tableCell")) {
     var row = cell.parentNode;
+    if(row.dataset["id"]){
 
     if (!modifiedRowsList.includes(row)) {
       modifiedRowsList.push(row);
     }
 
     row.classList.add("changed");
+    unsavedChangesEle.style.visibility = "visible";
   }
-  unsavedChangesEle.style.visibility = "visible";
-  console.log(modifiedRowsList);
+  }
+  
 }
 function rowToSong(row) {
+  console.log(row);
   let name = row.children[0].textContent;
   let artist = row.children[1].textContent;
   let category = row.children[2].children[0].value;
@@ -237,16 +241,15 @@ function makeVotesTable(event) {
 //post requests
 
 async function insertSong(event) {
-  let parentRow = event.target.parentNode.parentNode.parentNode;
+ let parentRow = event.target.closest('tr');
   event.target.closest("td").remove();
 
   try {
     const response = await axios.post("/insertSong", rowToSong(parentRow));
-    console.log("Response received:", response.data);
   } catch (error) {
     console.error("Error :", error);
   }
-  clearModified();
+ // clearModified();
 }
 async function updateSongs() {
   
@@ -256,7 +259,6 @@ async function updateSongs() {
     
     try {
       const response = await axios.post("/editSong", song);
-      console.log("Response received:", response.data);
     } catch (error) {
       console.error("Error :", error);
     }
