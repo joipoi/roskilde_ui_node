@@ -9,7 +9,6 @@ router.post('/insertSong', async (req, res) => {
     let data = req.body;
 
     try {
-        // Call the addSong function and wait for its result
         await db.addSong(data.name, data.artist, data.category, 2024, data.user);
         return res.json({ response: "Added song with name " + data.name });
     } catch (error) {

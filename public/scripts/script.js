@@ -118,6 +118,10 @@ window.addEventListener("load", (event) => {
 function addRow(table) {
   const columnCount = table.rows[0].cells.length;
   const newRow = document.createElement("tr");
+  modifiedRowsList.push(newRow);
+  newRow.classList.add("changed");
+  unsavedChangesEle.style.visibility = "visible";
+
   const userSelect = document.querySelector('.user-select');
   const categorySelect = document.querySelector('.category-select');
 
@@ -142,34 +146,34 @@ function addRow(table) {
       e.preventDefault();
       const text = e.clipboardData.getData('text/plain');
     
-      // Insert plain text at the caret position
       document.execCommand('insertText', false, text);
     });
-
-
   }
-  const symbolCell = document.createElement("td");
-  symbolCell.className = "symbol-cell";
+
 
   const tableId = table.id;
-  if (tableId === "adminTable") {
-    symbolCell.addEventListener("click", insertSong);
-  } else if (tableId === "userEditingTable") {
+  if (tableId === "userEditingTable") {
+    const symbolCell = document.createElement("td");
+    symbolCell.className = "symbol-cell";
     symbolCell.addEventListener("click", (event) => {
       const row = event.target.closest("tr");
       const username = row.children[0].textContent.trim();
       const password = row.children[1].textContent.trim();
       registerUser(username, password);
       event.target.closest("td").remove();
+      row.classList.remove("changed");
+     
     });
+    const symbolImg = document.createElement("svg");
+    symbolImg.innerHTML =
+      '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" ><path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/></svg>';
+  
+    symbolCell.appendChild(symbolImg);
+    newRow.appendChild(symbolCell);
   }
 
-  const symbolImg = document.createElement("svg");
-  symbolImg.innerHTML =
-    '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" ><path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/></svg>';
+ 
 
-  symbolCell.appendChild(symbolImg);
-  newRow.appendChild(symbolCell);
 
   table.appendChild(newRow);
 }
@@ -276,19 +280,27 @@ async function insertSong(event) {
  // clearModified();
 }
 async function updateSongs() {
-  
-  for(let row of modifiedRowsList){
+  for (let row of modifiedRowsList) {
     let song = rowToSong(row);
-    song.id = row.dataset.id;
-    
+    let id = row.dataset.id;
+
     try {
-      const response = await axios.post("/editSong", song);
+      if (!id) {
+        const response = await axios.post("/insertSong", song);
+       
+      } else {
+        // Existing song
+        song.id = id;
+        const response = await axios.post("/editSong", song);
+      }
     } catch (error) {
-      console.error("Error :", error);
+      console.error("Error:", error);
     }
   }
+
   clearModified();
 }
+
 
 async function removeRow(songID) {
   const rows = adminTable.getElementsByTagName("tr");
