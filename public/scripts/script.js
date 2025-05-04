@@ -174,8 +174,8 @@ function addRow(table) {
 
  
 
-
-  table.appendChild(newRow);
+  const adminTBody = document.getElementById("adminTBody");
+  adminTBody.appendChild(newRow);
 }
 
 function markRowAsModified(event) {
