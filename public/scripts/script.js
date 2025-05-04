@@ -273,7 +273,7 @@ async function insertSong(event) {
   event.target.closest("td").remove();
 
   try {
-    const response = await axios.post("/insertSong", rowToSong(parentRow));
+    await axios.post("/insertSong", rowToSong(parentRow));
   } catch (error) {
     console.error("Error :", error);
   }
@@ -287,11 +287,11 @@ async function updateSongs() {
     try {
       if (!id) {
         const response = await axios.post("/insertSong", song);
-       
+        row.dataset.id = response.data.songID;
       } else {
         // Existing song
         song.id = id;
-        const response = await axios.post("/editSong", song);
+        await axios.post("/editSong", song);
       }
     } catch (error) {
       console.error("Error:", error);

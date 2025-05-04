@@ -9,8 +9,8 @@ router.post('/insertSong', async (req, res) => {
     let data = req.body;
 
     try {
-        await db.addSong(data.name, data.artist, data.category, 2024, data.user);
-        return res.json({ response: "Added song with name " + data.name });
+        const songID = await db.addSong(data.name, data.artist, data.category, 2024, data.user);
+        return res.json({ songID: songID });
     } catch (error) {
         console.error('Error adding song:', error);
         return res.status(500).json({ error: "Failed to add song. Please try again." });

@@ -63,7 +63,7 @@ async function query(sql, params) {
 async function addSong(name, artist, category, year, user) {
     try {
         const results = await query('INSERT INTO song (`name`, `artist`, `category`, `year`, `user`) VALUES (?, ?, ?, ?, ?);', [name, artist, category, year, user]);
-        return results;
+        return results.insertId;
     } catch (error) {
         console.error('Database error during song insertion:', error);
         return null
